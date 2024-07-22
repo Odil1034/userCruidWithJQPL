@@ -1,26 +1,30 @@
 package uz.pdp.maven.usercruidwithjpql.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@MappedSuperclass
 @Getter
 @Setter
-@MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseEntity {
 
-    @Id
-    private String Id;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

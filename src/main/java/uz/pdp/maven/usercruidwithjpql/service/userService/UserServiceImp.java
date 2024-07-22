@@ -1,7 +1,6 @@
 package uz.pdp.maven.usercruidwithjpql.service.userService;
 
 import jakarta.persistence.*;
-import jakarta.validation.Validation;
 import uz.pdp.maven.usercruidwithjpql.entity.user.User;
 import uz.pdp.maven.usercruidwithjpql.repository.UserRepository;
 import uz.pdp.maven.usercruidwithjpql.util.ValidationUtil;
@@ -22,12 +21,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void signUp(User user) {
-        ValidationUtil validationUtil = new ValidationUtil();
-        boolean isValid = validationUtil.isValid(user);
-        if (isValid){
+        String isValid = ValidationUtil.isValid(user);
+        if (isValid.equals("true")){
             userRepository.save(user);
         }else {
-
+            System.out.println(isValid);
         }
     }
 
@@ -85,5 +83,14 @@ public class UserServiceImp implements UserService {
         TypedQuery<User> fromUser = em.createQuery("from User", User.class);
         List<User> users = fromUser.getResultList();
         return users;
+    }
+
+    private static UserService userService;
+
+    public static UserService getInstance(){
+        if (userService == null) {
+            userService = new UserServiceImp();
+        }
+        return userService;
     }
 }

@@ -8,20 +8,14 @@ import jakarta.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.StringJoiner;
 
-public class ValidationUtil {
+public interface ValidationUtil {
 
-    private ValidatorFactory validatorFactory;
-    private Validator validator;
-
-    public ValidationUtil() {
-        this.validatorFactory = Validation.buildDefaultValidatorFactory();
-        this.validator = validatorFactory.getValidator();
-    }
-
-    public boolean isValid(Object object) {
-        Set<ConstraintViolation<Object>> violations = validator.validate(object, Object.class);
+    static String isValid(Object object) {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
+        Set<ConstraintViolation<Object>> violations = validator.validate(object);
         if (violations.isEmpty()) {
-            return true;
+            return "true";
         } else {
             StringJoiner message = new StringJoiner("\n");
             for (ConstraintViolation<Object> violation : violations) {
@@ -29,8 +23,7 @@ public class ValidationUtil {
                         violation.getPropertyPath() + "  " +
                         violation.getMessage());
             }
-            System.out.println(message);
-            return false;
+            return message.toString();
         }
     }
 }

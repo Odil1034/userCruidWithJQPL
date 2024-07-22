@@ -13,6 +13,7 @@ import uz.pdp.maven.usercruidwithjpql.entity.BaseEntity;
 @Getter
 @Setter
 @Builder
+@Table (name = "users")
 @NamedQuery(
         name = "loginQuery",
         query = "from User u where u.username=:username and u.email = :email and u.password = :password")
@@ -20,7 +21,7 @@ public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserRepository implements BaseRepository<User> {
-
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCruid");
+    private EntityManager em = emf.createEntityManager();
     public User login(String username, String email, String password) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
-        EntityManager em = emf.createEntityManager();
+
         TypedQuery<User> query = em.createNamedQuery("loginQuery", User.class);
         query.setParameter("username", username);
         query.setParameter("email", email);
@@ -25,7 +25,7 @@ public class UserRepository implements BaseRepository<User> {
 
     @Override
     public User get(String id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCruid");
         EntityManager em = emf.createEntityManager();
         User user = em.find(User.class, id);
         return user;
@@ -33,8 +33,6 @@ public class UserRepository implements BaseRepository<User> {
 
     @Override
     public void save(User user) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
-        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
@@ -42,7 +40,7 @@ public class UserRepository implements BaseRepository<User> {
 
     @Override
     public void delete(String id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCruid");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         User user = em.find(User.class, id);
@@ -52,7 +50,7 @@ public class UserRepository implements BaseRepository<User> {
 
     @Override
     public void update(User user) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCruid");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         User oldUser = em.find(User.class, user.getId());
@@ -72,7 +70,7 @@ public class UserRepository implements BaseRepository<User> {
 
     @Override
     public List<User> getAll() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCrud");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("userCruid");
         EntityManager em = emf.createEntityManager();
         TypedQuery<User> fromUser = em.createQuery("from User", User.class);
         List<User> users = fromUser.getResultList();
